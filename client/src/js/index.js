@@ -1,3 +1,5 @@
+
+
 // Import functions
 import { initdb, postDb, deleteDb, editDb } from './database';
 import { fetchCards } from './cards';
@@ -107,3 +109,24 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js');
   })
 };
+
+// Install button
+const installBtn = document.getElementById('installBtn');
+
+// sets the visibility of the button to “visible”
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installBtn.style.visibility = 'visible';
+
+  // sets the button as disabled if ”true”, and sets the text of the button to “Installed!”.
+  installBtn.addEventListener('click', () => {
+    event.prompt();
+    installBtn.setAttribute('disabled', true);
+    installBtn.textContent = 'Installed!';
+  });
+});
+
+// check whether or not the app has been installed
+window.addEventListener('appinstalled', (event) => {
+  console.log('👍', 'appinstalled', event);
+});
