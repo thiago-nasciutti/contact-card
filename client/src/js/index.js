@@ -1,8 +1,6 @@
-
-
 // Import functions
-import { initdb, postDb, deleteDb, editDb } from './database';
-import { fetchCards } from './cards';
+import {initdb, postDb, deleteDb, editDb} from './database';
+import {fetchCards} from './cards';
 import { toggleForm, clearForm } from './form';
 
 // Import CSS files
@@ -33,16 +31,16 @@ let submitBtnToUpdate = false;
 let profileId;
 
 newContactButton.addEventListener('click', event => {
-  toggleForm()
+ toggleForm()
 })
 
 form.addEventListener('submit', (event) => {
   // handle the form data
-  event.preventDefault();
-  let name = document.getElementById("name").value;
-  let phone = document.getElementById("phone").value;
-  let email = document.getElementById("email").value;
-  let profile = document.querySelector('input[type="radio"]:checked').value;
+event.preventDefault();
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let email = document.getElementById("email").value;
+let profile = document.querySelector('input[type="radio"]:checked').value;
 
   // Post form data to IndexedDB OR Edit an existing card in IndexedDB
   if (submitBtnToUpdate == false) {
@@ -50,38 +48,38 @@ form.addEventListener('submit', (event) => {
   } else {
 
     // Obtains values passed into the form element
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
-    let email = document.getElementById("email").value;
-    let profile = document.querySelector('input[type="radio"]:checked').value;
+   let name = document.getElementById("name").value;
+   let phone = document.getElementById("phone").value;
+   let email = document.getElementById("email").value;
+   let profile = document.querySelector('input[type="radio"]:checked').value;
 
-    // Calls the editDB function passing in any values from the form element as well as the ID of the contact that we are updating
-    editDb(profileId, name, email, phone, profile);
+   // Calls the editDB function passing in any values from the form element as well as the ID of the contact that we are updating
+   editDb(profileId, name, email, phone, profile);
 
-    fetchCards();
+   fetchCards();
 
-    // Toggles the submit button back to POST functionality
-    submitBtnToUpdate = false;
+   // Toggles the submit button back to POST functionality
+   submitBtnToUpdate = false;
   }
 
-  // Clear form
-  clearForm();
-  // Toggle form
-  toggleForm();
-  // Reload the DOM
-  fetchCards();
+// Clear form
+clearForm();
+// Toggle form
+toggleForm();
+// Reload the DOM
+fetchCards();
 })
 
 // Card functionality
 // Adds deleteCard() to the global scope so each card has access to it.
 window.deleteCard = (e) => {
   // Grabs the id from the button element attached to the contact card.
-  let id = parseInt(e.id);
-  // Delete the card
-  deleteDb(id);
-  // Reload the DOM
-  fetchCards();
-};
+    let id = parseInt(e.id);
+    // Delete the card
+    deleteDb(id);
+    // Reload the DOM
+    fetchCards();
+  };
 
 window.editCard = (e) => {
   // Grabs the id from the button element attached to the contact card and sets a global variable that will be used in the form element.
@@ -97,28 +95,27 @@ window.editCard = (e) => {
   document.getElementById("phone").value = editPhone;
 
   form.style.display = "block";
-
+  
   // Toggles the submit button so that it now Updates an existing contact instead of posting a new one
   submitBtnToUpdate = true;
 };
 
-//register the service worker
+// Checks to see if serviceWorker exists in the navigator and installs our service worker configurations
 if ('serviceWorker' in navigator) {
-  // Use the window load event to keep the page load performant
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js');
-  })
-};
+  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
+      console.log('Successfully registered service worker', reg);
+  }).catch(function(err) {
+      console.warn('Error whilst registering service worker', err);
+  });
+}
 
-// Install button
+  // Install button 
 const installBtn = document.getElementById('installBtn');
 
-// sets the visibility of the button to “visible”
 window.addEventListener('beforeinstallprompt', (event) => {
   event.preventDefault();
   installBtn.style.visibility = 'visible';
 
-  // sets the button as disabled if ”true”, and sets the text of the button to “Installed!”.
   installBtn.addEventListener('click', () => {
     event.prompt();
     installBtn.setAttribute('disabled', true);
@@ -126,7 +123,7 @@ window.addEventListener('beforeinstallprompt', (event) => {
   });
 });
 
-// check whether or not the app has been installed
 window.addEventListener('appinstalled', (event) => {
   console.log('👍', 'appinstalled', event);
 });
+    
